@@ -15,7 +15,7 @@ datasource db {
 
 enum AccountStatus {
   PENDING
-  ACCEPTED
+  ACTIVATE
   DELETED
 }
 
@@ -33,7 +33,7 @@ model User {
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") // 수정일
   deletedAt DateTime? @map("deleted_at") // 삭제일
 
-  Account Account[]
+  account Account?
 
   @@map("user")
 }
@@ -41,20 +41,19 @@ model User {
 // 계정
 model Account {
   id              Int           @id @default(autoincrement())
-  userId          Int           @map("user_id") // 유저 ID
+  userId          Int           @unique @map("user_id") // 유저 ID, 하나의 User가 하나의 Account만 가지도록 설정
   loginId         String?       @map("login_id") @db.VarChar(20) // 계정아이디
   email           String?       @db.VarChar(255) // 이메일
   mobile          String?       @db.VarChar(16) // 휴대폰번호
   encryptPassword String?       @map("encrypt_password") @db.VarChar(255) // 암호화된 비밀번호
-  role            String        @db.VarChar(10) // 권한
   status          AccountStatus @default(PENDING) // 계정 상태
 
   createdAt DateTime  @default(now()) @map("created_at") // 생성일
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") // 수정일
   deletedAt DateTime? @map("deleted_at") // 삭제일
 
-  user          User            @relation(fields: [userId], references: [id]) // 유저
-  SocialAccount SocialAccount[]
+  user          User           @relation(fields: [userId], references: [id])
+  socialAccount SocialAccount?
 
   @@map("account")
 }
@@ -62,7 +61,7 @@ model Account {
 // 소셜 계정
 model SocialAccount {
   id             Int    @id @default(autoincrement()) /// 소셜 계정 ID
-  accountId      Int    @map("account_id") // 계정 ID
+  accountId      Int    @unique @map("account_id") // 계정 ID, 하나의 Account가 하나의 SocialAccount만 가지도록 설정
   provider       String @db.VarChar(20) // 소셜 로그인 제공자 (kakao, google, naver, apple)
   providerUserId String @map("provider_user_id") @db.VarChar(255) /// 소셜 제공자에서 사용하는 유저 ID
 
@@ -72,6 +71,7 @@ model SocialAccount {
 
   account Account @relation(fields: [accountId], references: [id]) /// 계정
 
+  @@unique([provider, providerUserId]) // 동일 소셜 ID 중복 방지
   @@index([provider, providerUserId])
   @@map("social_account")
 }
