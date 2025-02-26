@@ -7,7 +7,7 @@ export class VerificationService {
   constructor(private readonly configService: ConfigService) {}
 
   async identityVerification(identityVerificationId: string): Promise<IdentityVerificationResponse> {
-    const url = `https://api.portone.io/identity-verifications/${encodeURIComponent(identityVerificationId)}`;
+    const url = `https://api.portone.io/identity-verifications/${encodeURIComponent(identityVerificationId)}/?storeId=${this.configService.getOrThrow('PORTONE_STORE_ID')}`;
 
     const verificationResponse = await fetch(url, {
       method: 'GET',
