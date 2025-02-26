@@ -16,14 +16,7 @@ export type IdentityVerificationResponse = {
     phoneNumber: string;
     gender: 'MALE' | 'FEMALE' | 'OTHER';
     isForeigner: boolean;
-    operator:
-      | 'SKT'
-      | 'KT'
-      | 'LGU'
-      | 'SKT_MVNO'
-      | 'KT_MVNO'
-      | 'LGU_MVNO'
-      | 'ETC';
+    operator: 'SKT' | 'KT' | 'LGU' | 'SKT_MVNO' | 'KT_MVNO' | 'LGU_MVNO' | 'ETC';
     ci: string;
     di: string;
   };

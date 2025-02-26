@@ -1,9 +1,12 @@
 import { ConfigService } from '@nestjs/config';
+import { IdentityVerificationResponse } from './types/verification.type';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class VerificationService {
   constructor(private readonly configService: ConfigService) {}
 
-  async identityVerification(identityVerificationId: string) {
+  async identityVerification(identityVerificationId: string): Promise<IdentityVerificationResponse> {
     const url = `https://api.portone.io/identity-verifications/${encodeURIComponent(identityVerificationId)}`;
 
     const verificationResponse = await fetch(url, {
@@ -15,11 +18,10 @@ export class VerificationService {
     });
 
     if (!verificationResponse.ok) {
-      throw new Error(
-        `Error: ${verificationResponse.status} ${verificationResponse.statusText}`,
-      );
+      throw new Error(`Error: ${verificationResponse.status} ${verificationResponse.statusText}`);
     }
 
-    return verificationResponse.json(); // JSON 응답을 파싱하여 반환
+    const verificationData: IdentityVerificationResponse = await verificationResponse.json();
+    return verificationData;
   }
 }
