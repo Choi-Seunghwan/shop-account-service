@@ -1,8 +1,8 @@
-import { Body, Injectable, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { AccountService } from './account.service';
 
-@Injectable()
+@Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
