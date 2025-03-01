@@ -24,7 +24,6 @@ export class AuthorizationService {
 
     const token = await this.jwtService.signAsync(fullPayload, {
       secret: this.configService.getOrThrow('JWT_SECRET'),
-      expiresIn: '1d',
     });
 
     return token;

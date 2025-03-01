@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
 import { SignInData, SignUpData } from './types/account.type';
 import { AccountStatus } from '@prisma/client';
 import { VerificationService } from 'src/modules/verification/verification.service';
@@ -7,17 +6,18 @@ import { hashPassword } from 'src/utils/hashPassword';
 import { sha256Hash } from 'src/utils/sha256hash';
 import { comparePassword } from 'src/utils/comparePassword';
 import { AuthorizationService } from '../authorization/authorization.service';
+import { AccountRepository } from './account.repository';
 
 @Injectable()
 export class AccountService {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly accountRepository: AccountRepository,
     private readonly verificationService: VerificationService,
     private readonly authorizationService: AuthorizationService,
   ) {}
 
   async signUp(data: SignUpData) {
-    const alreadyExists = await this.prisma.account.findFirst({
+    const alreadyExists = await this.accountRepository.findAccount({
       where: {
         loginId: data.loginId,
         deletedAt: null,
@@ -33,7 +33,7 @@ export class AccountService {
 
     console.log('verificationData: ', verificationData);
 
-    await this.prisma.account.create({
+    await this.accountRepository.createAccount({
       data: {
         loginId: data.loginId,
         email: data.email,
@@ -52,14 +52,11 @@ export class AccountService {
     });
   }
 
-  async signIn(data: SignInData): Promise<string> {
-    const account = await this.prisma.account.findFirst({
+  async signIn(data: SignInData): Promise<{ accessToken: string }> {
+    const account = await this.accountRepository.findAccount({
       where: {
         loginId: data.loginId,
         deletedAt: null,
-      },
-      include: {
-        user: true,
       },
     });
 
@@ -75,6 +72,15 @@ export class AccountService {
       email: account.email,
     });
 
-    return token;
+    return { accessToken: token };
+  }
+
+  async getMe(accountId: number) {
+    return await this.accountRepository.findUniqueAccount({
+      where: {
+        id: accountId,
+        deletedAt: null,
+      },
+    });
   }
 }
