@@ -5,21 +5,23 @@ import { AuthGuard } from '../authorization/authorization.guard';
 import { SignInDto } from './dtos/sign-in.dto';
 import { User } from '../common/decorators/user.decorator';
 import { JwtPayload } from '../authorization/types/authorization.type';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiOkResponse } from '@nestjs/swagger';
 import { AccountResponseDto } from './dtos/account-response.dto';
+import { SignInResponseDto } from './dtos/sign-in-response.dto';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @ApiOkResponse({ type: Boolean })
+  @ApiBadRequestResponse()
   @Post('/sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
     await this.accountService.signUp(signUpDto);
     return true;
   }
 
-  @ApiOkResponse({ type: String })
+  @ApiOkResponse({ type: SignInResponseDto })
   @Post('/sign-in')
   async signIn(@Body() signInDto: SignInDto) {
     return await this.accountService.signIn({ loginId: signInDto.loginId, password: signInDto.password });

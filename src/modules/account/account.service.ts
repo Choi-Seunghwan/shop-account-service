@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { SignInData, SignUpData } from './types/account.type';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { AccountEntity, SignInData, SignUpData } from './types/account.type';
 import { AccountStatus } from '@prisma/client';
 import { VerificationService } from 'src/modules/verification/verification.service';
 import { hashPassword } from 'src/utils/hashPassword';
@@ -17,21 +17,19 @@ export class AccountService {
   ) {}
 
   async signUp(data: SignUpData) {
+    const verificationData = await this.verificationService.identityVerification(data.identityVerificationId);
+    const customer = verificationData.verifiedCustomer;
+
+    if (!customer) throw new BadRequestException('Invalid identity verification');
+
     const alreadyExists = await this.accountRepository.findAccount({
       where: {
-        loginId: data.loginId,
+        OR: [{ loginId: data.loginId }, { user: { hashedCi: sha256Hash(customer.ci) } }],
         deletedAt: null,
       },
     });
 
-    if (alreadyExists) throw new Error('Already exists');
-
-    const verificationData = await this.verificationService.identityVerification(data.identityVerificationId);
-    const customer = verificationData.verifiedCustomer;
-
-    if (!customer) throw new Error('Invalid identity verification');
-
-    console.log('verificationData: ', verificationData);
+    if (alreadyExists) throw new BadRequestException('Already exists');
 
     await this.accountRepository.createAccount({
       data: {
@@ -52,7 +50,7 @@ export class AccountService {
     });
   }
 
-  async signIn(data: SignInData): Promise<{ accessToken: string }> {
+  async signIn(data: SignInData): Promise<{ accessToken: string; account: AccountEntity }> {
     const account = await this.accountRepository.findAccount({
       where: {
         loginId: data.loginId,
@@ -72,15 +70,20 @@ export class AccountService {
       email: account.email,
     });
 
-    return { accessToken: token };
+    return {
+      accessToken: token,
+      account: { accountId: account.id, loginId: account.loginId, email: account.email, status: account.status },
+    };
   }
 
-  async getMe(accountId: number) {
-    return await this.accountRepository.findUniqueAccount({
+  async getMe(accountId: number): Promise<AccountEntity> {
+    const account = await this.accountRepository.findUniqueAccount({
       where: {
         id: accountId,
         deletedAt: null,
       },
     });
+
+    return { accountId: account.id, loginId: account.loginId, email: account.email, status: account.status };
   }
 }

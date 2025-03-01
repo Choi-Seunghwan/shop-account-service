@@ -11,7 +11,9 @@ export class AccountRepository {
   }
 
   async findUniqueAccount(args: Prisma.AccountFindUniqueArgs) {
-    return await this.prismaService.account.findUnique(args);
+    return await this.prismaService.account.findUnique({
+      ...args,
+    });
   }
 
   async createAccount(args: Prisma.AccountCreateArgs) {

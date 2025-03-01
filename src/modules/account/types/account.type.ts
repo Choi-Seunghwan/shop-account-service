@@ -1,3 +1,5 @@
+import { AccountStatus } from '@prisma/client';
+
 export type SignUpData = {
   loginId: string;
   email: string;
@@ -10,8 +12,9 @@ export type SignInData = {
   password: string;
 };
 
-export enum AccountStatus {
-  PENDING = 'PENDING',
-  ACTIVATE = 'ACTIVATE',
-  DELETED = 'DELETED',
-}
+export type AccountEntity = {
+  accountId: number;
+  loginId: string;
+  email: string;
+  status: AccountStatus;
+};
