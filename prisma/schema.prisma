@@ -30,8 +30,8 @@ model User {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar(255) // 이름
   mobile      String?    @db.VarChar(16) // 휴대폰 번호
-  birth       Int? // 생년월일
-  ci          String     @unique @db.VarChar(64) // CI
+  birth       DateTime   @db.Date // 생년월일
+  hashedCi    String     @unique @map("hashed_ci") @db.VarChar(64) // CI
   gender      UserGender // 성별
   isForeigner Boolean    @default(false) @map("foreigner") // 외국인여부
 

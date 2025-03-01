@@ -5,6 +5,11 @@ export type SignUpData = {
   identityVerificationId: string;
 };
 
+export type SignInData = {
+  loginId: string;
+  password: string;
+};
+
 export enum AccountStatus {
   PENDING = 'PENDING',
   ACTIVATE = 'ACTIVATE',
