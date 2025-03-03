@@ -5,8 +5,8 @@ import { VerificationService } from 'src/modules/verification/verification.servi
 import { hashPassword } from 'src/utils/hashPassword';
 import { sha256Hash } from 'src/utils/sha256hash';
 import { comparePassword } from 'src/utils/comparePassword';
-import { AuthorizationService } from '../authorization/authorization.service';
 import { AccountRepository } from './account.repository';
+import { AuthorizationService } from '@choi-seunghwan/authorization';
 
 @Injectable()
 export class AccountService {

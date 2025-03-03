@@ -3,7 +3,7 @@ import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
 import { VerificationModule } from 'src/modules/verification/verification.module';
 import { AccountRepository } from './account.repository';
-import { AuthorizationModule } from '../authorization/authorization.module';
+import { AuthorizationModule } from '@choi-seunghwan/authorization';
 
 @Module({
   imports: [VerificationModule, AuthorizationModule],
