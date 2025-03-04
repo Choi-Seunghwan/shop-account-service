@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './modules/account/account.module';
 import { DatabaseModule } from './database/database.module';
+import { AuthorizationModule } from '@choi-seunghwan/authorization';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { DatabaseModule } from './database/database.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    AuthorizationModule.forRoot({ jwtSecret: process.env.JWT_SECRET }),
     DatabaseModule,
     AccountModule,
   ],
