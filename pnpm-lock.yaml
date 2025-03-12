@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@choi-seunghwan/authorization':
-        specifier: ^0.1.15
-        version: 0.1.15(@nestjs/platform-express@11.0.11(@nestjs/common@11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.0.11))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+        specifier: ^0.1.16
+        version: 0.1.16(@nestjs/platform-express@11.0.11(@nestjs/common@11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.0.11))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/common':
         specifier: ^11.0.10
         version: 11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -306,8 +306,8 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@choi-seunghwan/authorization@0.1.15':
-    resolution: {integrity: sha512-mG3oLl1U0fnoiJg1CK7uPT0/ebhiQugRD/+3Vk/QjFXTDL5uVspoafm3dNBjAu+Wrx+61AZc+DOyYWo+OIIGeQ==, tarball: https://npm.pkg.github.com/download/@choi-seunghwan/authorization/0.1.15/865033f178d4a731b221a573f966545903850275}
+  '@choi-seunghwan/authorization@0.1.16':
+    resolution: {integrity: sha512-+sbmD7O+PkZskY0nzGOB6AMYT9Dkip7i9PuuF9hE5tMi5NPTIh9aW71rq+DWMmeaFDcZr81SXICrjO73Dqhy4g==, tarball: https://npm.pkg.github.com/download/@choi-seunghwan/authorization/0.1.16/ea9f2616ea97196fb8ac8005ae960adf8a827f3c}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -3219,7 +3219,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@choi-seunghwan/authorization@0.1.15(@nestjs/platform-express@11.0.11(@nestjs/common@11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.0.11))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+  '@choi-seunghwan/authorization@0.1.16(@nestjs/platform-express@11.0.11(@nestjs/common@11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.0.11))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.0.11(@nestjs/common@11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.11)(reflect-metadata@0.2.2)(rxjs@7.8.2)
