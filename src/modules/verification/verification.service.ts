@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { IdentityVerificationResponse } from './types/verification.type';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class VerificationService {
@@ -18,7 +18,7 @@ export class VerificationService {
     });
 
     if (!verificationResponse.ok) {
-      throw new Error(`Error: ${verificationResponse.status} ${verificationResponse.statusText}`);
+      throw new UnauthorizedException(`Error: ${verificationResponse.status} ${verificationResponse.statusText}`);
     }
 
     const verificationData: IdentityVerificationResponse = await verificationResponse.json();

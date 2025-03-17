@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AccountEntity, SignInData, SignUpData } from './types/account.type';
 import { AccountStatus } from '@prisma/client';
 import { VerificationService } from 'src/modules/verification/verification.service';
@@ -7,6 +7,7 @@ import { sha256Hash } from 'src/utils/sha256hash';
 import { comparePassword } from 'src/utils/comparePassword';
 import { AccountRepository } from './account.repository';
 import { AuthorizationService } from '@choi-seunghwan/authorization';
+import { REFRESH_TOKEN_EXPIRATION_TIME, TOKEN_EXPIRATION_TIME } from './constants/account.constant';
 
 @Injectable()
 export class AccountService {
@@ -50,7 +51,7 @@ export class AccountService {
     });
   }
 
-  async signIn(data: SignInData): Promise<{ accessToken: string; account: AccountEntity }> {
+  async signIn(data: SignInData): Promise<{ accessToken: string; refreshToken: string; account: AccountEntity }> {
     const account = await this.accountRepository.findAccount({
       where: {
         loginId: data.loginId,
@@ -58,22 +59,41 @@ export class AccountService {
       },
     });
 
-    if (!account) throw new Error('Not found');
+    if (!account) throw new UnauthorizedException('Not found');
 
     const isValid = await comparePassword(data.password, account.encryptPassword);
 
-    if (!isValid) throw new Error('Invalid password');
+    if (!isValid) throw new UnauthorizedException('Invalid password');
 
-    const token = await this.authorizationService.generateToken({
+    const payload = {
       accountId: account.id,
       loginId: account.loginId,
       email: account.email,
+    };
+
+    const accessToken = await this.authorizationService.generateToken({
+      ...payload,
+      exp: TOKEN_EXPIRATION_TIME,
+    });
+
+    const refreshToken = await this.authorizationService.generateToken({
+      ...payload,
+      exp: REFRESH_TOKEN_EXPIRATION_TIME,
     });
 
     return {
-      accessToken: token,
+      accessToken,
+      refreshToken,
       account: { accountId: account.id, loginId: account.loginId, email: account.email, status: account.status },
     };
+  }
+
+  async refreshToken(refreshToken: string) {
+    const payload = await this.authorizationService.validateToken(refreshToken);
+
+    const accessToken = await this.authorizationService.generateToken({ ...payload, exp: TOKEN_EXPIRATION_TIME });
+
+    return { accessToken };
   }
 
   async getMe(accountId: number): Promise<AccountEntity> {
