@@ -35,7 +35,7 @@ export class AccountController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: REFRESH_TOKEN_EXPIRATION_TIME,
+      maxAge: REFRESH_TOKEN_EXPIRATION_TIME * 1000,
     });
 
     return { accessToken, account };
@@ -43,17 +43,22 @@ export class AccountController {
 
   @ApiOkResponse({ type: RefreshTokenResponseDto })
   @Post('/refresh-token')
-  async refreshToken(@Req() req: Request) {
-    console.log('@@', req.cookies);
-    const refreshToken = req?.cookies?.refreshToken;
+  async refreshToken(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const oldRefreshToken = req?.cookies?.refreshToken;
 
-    if (!refreshToken) throw new UnauthorizedException('Refresh token not found');
+    if (!oldRefreshToken) throw new UnauthorizedException('Refresh token not found');
 
-    const { accessToken } = await this.accountService.refreshToken(refreshToken);
+    const { accessToken, newRefreshToken } = await this.accountService.refreshToken(oldRefreshToken);
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: REFRESH_TOKEN_EXPIRATION_TIME * 1000,
+    });
 
     return { accessToken };
   }
-
   @ApiOkResponse({ type: AccountResponseDto })
   @UseGuards(AuthGuard)
   @Get('/me')

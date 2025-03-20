@@ -88,12 +88,20 @@ export class AccountService {
     };
   }
 
-  async refreshToken(refreshToken: string) {
-    const payload = await this.authorizationService.validateToken(refreshToken);
+  async refreshToken(oldRefreshToken: string) {
+    const payload = await this.authorizationService.validateToken(oldRefreshToken);
 
-    const accessToken = await this.authorizationService.generateToken({ ...payload, exp: TOKEN_EXPIRATION_TIME });
+    const accessToken = await this.authorizationService.generateToken({
+      ...payload,
+      exp: TOKEN_EXPIRATION_TIME,
+    });
 
-    return { accessToken };
+    const newRefreshToken = await this.authorizationService.generateToken({
+      ...payload,
+      exp: REFRESH_TOKEN_EXPIRATION_TIME,
+    });
+
+    return { accessToken, newRefreshToken };
   }
 
   async getMe(accountId: number): Promise<AccountEntity> {
