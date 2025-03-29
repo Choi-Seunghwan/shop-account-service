@@ -114,4 +114,20 @@ export class AccountService {
 
     return { accountId: account.id, loginId: account.loginId, email: account.email, status: account.status };
   }
+
+  async checkDuplicateCI(identityVerificationId: string): Promise<boolean> {
+    const verificationData = await this.verificationService.identityVerification(identityVerificationId);
+    const customer = verificationData.verifiedCustomer;
+
+    if (!customer) throw new BadRequestException('Invalid identity verification');
+
+    const existing = await this.accountRepository.findAccount({
+      where: {
+        user: { hashedCi: sha256Hash(customer.ci) },
+        deletedAt: null,
+      },
+    });
+
+    return !!existing;
+  }
 }
