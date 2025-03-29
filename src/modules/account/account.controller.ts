@@ -41,6 +41,16 @@ export class AccountController {
     return { accessToken, account };
   }
 
+  @Post('sign-out')
+  @UseGuards(AuthGuard)
+  signOut(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+  }
+
   @ApiOkResponse({ type: RefreshTokenResponseDto })
   @Post('/refresh-token')
   async refreshToken(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
