@@ -3,7 +3,7 @@ import { AccountEntity, SignInData, SignUpData } from './types/account.type';
 import { AccountStatus } from '@prisma/client';
 import { VerificationService } from 'src/modules/verification/verification.service';
 import { hashPassword } from 'src/utils/hashPassword';
-import { sha256Hash } from 'src/utils/sha256hash';
+import { sha256Hash } from 'src/utils/sha256Hash';
 import { comparePassword } from 'src/utils/comparePassword';
 import { AccountRepository } from './account.repository';
 import { AuthorizationService } from '@choi-seunghwan/authorization';
