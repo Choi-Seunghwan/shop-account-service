@@ -1,6 +1,6 @@
 # shop-commerce-service
 
-예제용 회원 백엔드 프로젝트
+회원 백엔드 예시 프로젝트 (NestJS)
 
 ### Link
 
