@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { AccountEntity, SignInData, SignUpData } from './types/account.type';
 import { AccountStatus } from '@prisma/client';
 import { VerificationService } from 'src/modules/verification/verification.service';
@@ -111,6 +111,8 @@ export class AccountService {
         deletedAt: null,
       },
     });
+
+    if (!account) throw new NotFoundException('user not found');
 
     return { accountId: account.id, loginId: account.loginId, email: account.email, status: account.status };
   }

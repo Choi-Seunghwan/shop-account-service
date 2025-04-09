@@ -12,6 +12,7 @@ import { Request, Response } from 'express';
 import { RefreshTokenResponseDto } from './dtos/refresh-token-response.dto';
 import { CheckDuplicateCiDto } from './dtos/check-duplicate-ci.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GetUserInfoDto } from './dtos/get-user-info.dto';
 
 @Controller('account')
 export class AccountController {
@@ -85,9 +86,9 @@ export class AccountController {
     return await this.accountService.checkDuplicateCI(dto.identityVerificationId);
   }
 
-  @MessagePattern({ cmd: 'get-user-info', group: 'account' })
+  @MessagePattern({ cmd: 'account.get-user-info' })
   @ApiOkResponse({ type: AccountResponseDto })
-  async getUserInfo(@Payload() accountId: number) {
-    return await this.accountService.getMe(accountId);
+  async getUserInfo(@Payload() dto: GetUserInfoDto) {
+    return await this.accountService.getMe(dto.accountId);
   }
 }
