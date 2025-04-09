@@ -11,6 +11,7 @@ import { REFRESH_TOKEN_EXPIRATION_TIME } from './constants/account.constant';
 import { Request, Response } from 'express';
 import { RefreshTokenResponseDto } from './dtos/refresh-token-response.dto';
 import { CheckDuplicateCiDto } from './dtos/check-duplicate-ci.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('account')
 export class AccountController {
@@ -82,5 +83,11 @@ export class AccountController {
   @Post('/check-duplicate-ci')
   async checkDuplicateCI(@Body() dto: CheckDuplicateCiDto) {
     return await this.accountService.checkDuplicateCI(dto.identityVerificationId);
+  }
+
+  @MessagePattern({ cmd: 'get-user-info', group: 'account' })
+  @ApiOkResponse({ type: AccountResponseDto })
+  async getUserInfo(@Payload() accountId: number) {
+    return await this.accountService.getMe(accountId);
   }
 }
