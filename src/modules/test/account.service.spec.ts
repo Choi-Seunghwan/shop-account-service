@@ -114,5 +114,27 @@ describe('AccountService', () => {
         }),
       );
     });
+
+    it('should throw an error if identity verification fails', async () => {
+      verify.identityVerification.mockResolvedValue({
+        status: 'FAILED',
+        id: 'verif-id-fail',
+        verifiedCustomer: null, // No customer data on failure
+        channel: undefined,
+        customData: '',
+        requestedAt: '',
+        updatedAt: '',
+        statusChangedAt: '',
+      });
+
+      await expect(
+        service.signUp({
+          loginId: 'invaliduser',
+          password: 'pass1234',
+          email: 'fail@example.com',
+          identityVerificationId: 'verif-id-fail',
+        }),
+      ).rejects.toThrowError('Invalid identity verification');
+    });
   });
 });
