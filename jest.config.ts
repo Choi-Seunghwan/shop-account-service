@@ -3,12 +3,13 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', { tsconfig: './tsconfig.json' }],
+  },
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1',
   },
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-  },
+  roots: ['<rootDir>/src'],
 };
 
 export default config;
