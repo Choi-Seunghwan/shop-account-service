@@ -4,7 +4,7 @@
 
 ## Links
 
-- [web.shop.chuz.site](https://web.shop.chuz.site/) - 예제 사이트
+- [shop-web](https://github.com/Choi-Seunghwan/shop-web) - 클라이언트
 - [shop-commerce-service](https://github.com/Choi-Seunghwan/shop-commerce-service) - 커머스 서비스
 - [msa-common-packages](https://github.com/Choi-Seunghwan/msa-common-packages) - 공통 패키지
 
